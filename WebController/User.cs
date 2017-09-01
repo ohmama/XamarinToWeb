@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MasterDetailPageNavigation
+namespace WebController
 {
     public class User
     {

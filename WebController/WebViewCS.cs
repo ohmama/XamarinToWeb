@@ -2,7 +2,7 @@
 
 using Xamarin.Forms;
 
-namespace MasterDetailPageNavigation
+namespace WebController
 {
     public class WebViewCS : ContentPage
     {
