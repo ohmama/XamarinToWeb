@@ -12,8 +12,6 @@ namespace WebController
 
 		public MasterPageCS ()
 		{
-			Debug.WriteLine("in MasterPageCS");
-
 			var masterPageItems = new List<MasterPageItem> ();
 			masterPageItems.Add (new MasterPageItem {
 				Title = "Home Page",

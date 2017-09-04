@@ -12,7 +12,6 @@ namespace WebController
         public HomePageCS()
         {
 			Title = "WebView";
-            Debug.WriteLine("is a valid url "+Utils.IsValidUrl(App.UserEntity.Url));
 			browser = new WebView
 			{
 				VerticalOptions = LayoutOptions.FillAndExpand,
@@ -28,8 +27,6 @@ namespace WebController
 		{
 			base.OnAppearing();
             browser.Source = App.UserEntity.Url;
-			Debug.WriteLine("in on apprearing of home page");
-
 		}
 
     }

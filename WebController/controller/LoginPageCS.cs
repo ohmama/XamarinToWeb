@@ -169,7 +169,6 @@ namespace WebController
 		// last block entry event
 		void Last_LastEntry(object sender, TextChangedEventArgs e)
 		{
-            Debug.WriteLine("in last");
 			Entry_TextChanged(sender, e);
 			Login_CheckAsync(sender, e);
 		}
@@ -221,7 +220,6 @@ namespace WebController
 				}
 				Debug.WriteLine("contain empty");
 			}
-			Debug.WriteLine("in login");
 
 			if (!isSuccess && !alertLock)
 			{
