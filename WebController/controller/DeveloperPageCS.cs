@@ -35,7 +35,7 @@ namespace WebController
 
             List<PathEntity> mList = _database.GetPaths(App.UserEntity.ID);
             for (int i = 0; i < mList.Count; i++){
-                Debug.WriteLine("path "+i+" " + mList[i].Name);
+                Debug.WriteLine("path "+i+" " + mList[i].Path);
             }
 
 

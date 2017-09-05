@@ -9,7 +9,7 @@ namespace WebController
     public class PersonalInfoPageCS : ContentPage
     {
         public YangDb _database;
-
+        bool isInit = true;
         Entry usernameEntry, passwordEntry, pinEntry, urlEntry;
         Label messageLabel;
         List<PathItemUI> pathUIlist = new List<PathItemUI>();
@@ -89,7 +89,7 @@ namespace WebController
                 Grid pathCtn = MakeNewPath(item);
                 mContent.Children.Add(pathCtn);
             }
-
+            isInit = false;
             mContent.Children.Add(saveButton);
             mContent.Children.Add(messageLabel);
             Content = mContent;
@@ -104,11 +104,11 @@ namespace WebController
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Margin = new Thickness(20, 5)
             };
-            Entry name = new Entry { 
-                Placeholder = "Input Name", 
-                Keyboard = Keyboard.Create(KeyboardFlags.None) 
-            };
-            Entry url = new Entry { 
+            //Entry name = new Entry { 
+            //    Placeholder = "Input Name", 
+            //    Keyboard = Keyboard.Create(KeyboardFlags.None) 
+            //};
+            Entry entryItemPath = new Entry { 
                 Placeholder = "Input Path URL",
 				Keyboard = Keyboard.Create(KeyboardFlags.None)
 			};
@@ -122,32 +122,38 @@ namespace WebController
             foreach (var pathItem in App.PathList)
             {
                 if(pathItem != pathEntiry){
-                    parentPathPicker.Items.Add(pathItem.Name);
+                    parentPathPicker.Items.Add(pathItem.Path);
                 }
             }
+			Button btnDelete = new Button() { Text = "Delete" };
+            btnDelete.Clicked += OnDeleteClicked;
 
-            name.Unfocused += ItemFieldUnfocus;
-			url.Unfocused += ItemFieldUnfocus;
-
-            pathCtn.Children.Add(name, 0, 0);
-			pathCtn.Children.Add(url, 1, 0);
-            // add picker
-            pathCtn.Children.Add(parentPathPicker, 2, 0);
+			//name.Unfocused += ItemFieldUnfocus;
+			entryItemPath.Unfocused += ItemFieldUnfocus;
+            entryItemPath.TextChanged += PathChanging;
+            //pathCtn.Children.Add(name, 0, 0);
+			pathCtn.Children.Add(entryItemPath, 0, 0);
+			// add picker
+			pathCtn.Children.Add(parentPathPicker, 1, 0);
+            pathCtn.Children.Add(btnDelete, 2, 0);
 
 
             PathItemUI item = new PathItemUI();
             item.grid = pathCtn;
-            item.name = name;
-            item.path = url;
+            //item.name = name;
+            item.path = entryItemPath;
             item.picker = parentPathPicker;
             item.number = pathUIlist.Count();
+            item.delete = btnDelete;
             if (pathEntiry != null)
             {
-                item.name.Text = pathEntiry.Name;
+                //item.name.Text = pathEntiry.Name;
                 item.path.Text = pathEntiry.Path;
-                if(pathEntiry.Parent!=null)
+                if (!string.IsNullOrEmpty(pathEntiry.Parent))
                     item.picker.SelectedItem = pathEntiry.Parent;
-            }
+                else
+                    item.picker.SelectedItem = PathItemUI.NO_PARENT;
+			}
 
             pathUIlist.Add(item);
             return pathCtn;
@@ -159,7 +165,7 @@ namespace WebController
             bool isEmpty = false;
             foreach (PathItemUI item in pathUIlist)
             {
-                if (string.IsNullOrEmpty(item.name.Text) || string.IsNullOrEmpty(item.path.Text))
+                if (string.IsNullOrEmpty(item.path.Text))
                 {
                     isEmpty = true;
                     break;
@@ -178,8 +184,43 @@ namespace WebController
             }
         }
 
+        void OnDeleteClicked(object sender, EventArgs e){
+            Button btn = (Xamarin.Forms.Button)sender;
 
-        protected override void OnAppearing()
+   //         // if it is parent, dont delete
+			//foreach (var pathItem in pathUIlist)
+			//{
+			//	if (!string.IsNullOrEmpty(e.OldTextValue) && pathItem.picker.SelectedItem != null && pathItem.picker.SelectedItem.ToString().Equals(e.OldTextValue))
+			//	{
+			//		messageLabel.Text = "This item is a parent item, please unbind it firstly";
+			//		thisBlock.Text = e.OldTextValue;
+			//		return;
+			//	}
+			//}
+
+            int num = -1;
+            for (int i = 0; i < pathUIlist.Count(); i++)
+            {
+				PathItemUI item = pathUIlist[i];
+                if (item.delete == btn)
+                {
+                    num = i;
+					if (num != -1)
+					{
+                        pathUIlist.Remove(item);
+						mContent.Children.Remove(item.grid);
+                        break;
+					}
+                    //if(item.picker.SelectedIndex != 0){
+                    //    messageLabel.Text = "Delete the parent relationship firstly";
+                    //}
+                }
+            }
+
+        }
+
+
+		protected override void OnAppearing()
         {
             base.OnAppearing();
             if (App.UserEntity != null)
@@ -217,7 +258,7 @@ namespace WebController
                     PathItemUI item = pathUIlist.ElementAt(i);
 
                     path.Number = i;
-                    path.Name = item.name.Text;
+                    //path.Name = item.name.Text;
 					path.Path = item.path.Text;
                     if(item.picker.SelectedItem!=null && !item.picker.SelectedItem.Equals(PathItemUI.NO_PARENT)){
 						path.Parent = item.picker.SelectedItem.ToString();
@@ -231,7 +272,6 @@ namespace WebController
 				App.PathList = _database.GetPaths(App.UserEntity.ID);
 
 				Application.Current.MainPage = new MainPageCS();
-                //var answer = await DisplayAlert("Logout", "Do you want to logout?", "Yes", "No");
                 await DisplayAlert("Success", "Update success", "Ok");
 
             }
@@ -251,7 +291,7 @@ namespace WebController
         {
             foreach (var item in pathUIlist)
             {
-                if (string.IsNullOrEmpty(item.name.Text) || string.IsNullOrEmpty(item.path.Text))
+                if (string.IsNullOrEmpty(item.path.Text))
                 {
                     return false;
                 }
@@ -265,7 +305,6 @@ namespace WebController
             Entry thisBlock = ((Entry)sender);
             String pinStr = e.NewTextValue;
 
-            Debug.WriteLine(Utils.IsNumeric(pinStr));
             if (pinStr == null || pinStr.Trim().Length == 0)
             {
 
@@ -284,75 +323,71 @@ namespace WebController
             }
         }
 
-
-        void fillDataToPicker(Entry currentPathUI){
-            List<string> datas = new List<string>();
-
-			//exclude not complished one
-			for (int i = 0; i < pathUIlist.Count(); i++)
-			{
-				PathItemUI pathItem = pathUIlist[i];
-
-				 
-			    if (string.IsNullOrEmpty(pathItem.name.Text) || string.IsNullOrEmpty(pathItem.path.Text))
-			    {
-			        Debug.WriteLine("not complish");
-                } else{
-                    datas.Add(pathItem.name.Text);
-                }
-
-				// exclude the current same path. 
-				//if (currentPathUI != pathItem.name && currentPathUI != pathItem.path)
-				//{
-				//	// exclude not complished one
-				//	if (string.IsNullOrEmpty(pathItem.name.Text) || string.IsNullOrEmpty(pathItem.path.Text))
-				//	{
-				//		Debug.WriteLine("not complish");
-				//	}
-				//	else
-				//	{
-				//		// if everthing all right, set the item
-				//		pathItem.picker.Items.Add(pathItem.name.Text);
-				//	}
-				//}
-				//else
-				//{
-				//	Debug.WriteLine("they are same one");
-				//}
-			}
-            for (int i = 0; i < pathUIlist.Count(); i++){
-                PathItemUI pathItem = pathUIlist[i];
-				// first clear then add 
-				pathItem.picker.Items.Clear();
-				pathItem.picker.Items.Add(PathItemUI.NO_PARENT);
-
-                foreach (var item in datas)
-                {
-                    if(!pathItem.name.Text.Equals(item)){
-                        pathItem.picker.Items.Add(item);
-                    }
-                }
+        void PathChanging(object sender, TextChangedEventArgs e){
+            if(isInit){
+                return;
             }
-
-
-
-
+			Entry thisBlock = ((Entry)sender);
+			// if editing item already is other item's parent, cancle oparation
+			foreach (var pathItem in pathUIlist)
+			{
+                if (!string.IsNullOrEmpty(e.OldTextValue) && pathItem.picker.SelectedItem!=null && pathItem.picker.SelectedItem.ToString().Equals(e.OldTextValue))
+				{
+					messageLabel.Text = "This item is a parent item, please unbind it firstly";
+                    thisBlock.Text = e.OldTextValue;
+					return;
+				}
+			}
 		}
 		// after text change, dynamicly update the picker's value
         void ItemFieldUnfocus(object sender, EventArgs e)
 		{
 			Entry thisBlock = ((Entry)sender);
-            fillDataToPicker(thisBlock);
+			List<string> datas = new List<string>();
+
+
+
+            foreach (var pathItem in pathUIlist)
+			{
+				//PathItemUI pathItem = pathUIlist[i];
+				if (!string.IsNullOrEmpty(pathItem.path.Text))
+				{
+					datas.Add(pathItem.path.Text);
+				}
+			}
+			foreach (var pathItem in pathUIlist)
+			{
+                string parentNow = null;
+                if(pathItem.picker.SelectedItem!=null && !pathItem.picker.SelectedItem.Equals(PathItemUI.NO_PARENT)){
+                    parentNow = pathItem.picker.SelectedItem.ToString();
+                }
+				// first clear then add 
+				pathItem.picker.Items.Clear();
+				pathItem.picker.Items.Add(PathItemUI.NO_PARENT);
+
+				foreach (var item in datas)
+				{
+                    if (!pathItem.path.Text.Equals(item))
+					{
+						pathItem.picker.Items.Add(item);
+					}
+				}
+
+                if(parentNow != null){
+                    pathItem.picker.SelectedItem = parentNow;
+                }
+			}
 		}
 
         class PathItemUI
         {
             public const string NO_PARENT = "No Parent";
             public Grid grid;
-            public Entry name;
+            //public Entry name;
 			public Entry path;
             public Picker picker;
             public int number;
+            public Button delete;
         }
     }
 }

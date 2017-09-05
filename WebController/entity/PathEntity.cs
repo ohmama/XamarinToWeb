@@ -5,7 +5,7 @@ namespace WebController
     public class PathEntity:BaseEntiry
     {
         public int UserID { get; set; }
-		public string Name { get; set; }
+		//public string Name { get; set; }
 		public string Path { get; set; }
 		public string Parent { get; set; }
         public int Number { get; set; }

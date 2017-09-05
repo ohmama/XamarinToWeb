@@ -196,14 +196,19 @@ namespace WebController
 							//Navigation.InsertPageBefore(new MainPageCS(), Navigation.NavigationStack.First());
 							//await Navigation.PopToRootAsync();
 							// grab the paths
+							if (!App.UserEntity.Url.EndsWith("/", StringComparison.Ordinal))
+							{
+								App.UserEntity.Url += "/";
+							}
 							App.PathList = _database.GetPaths(user.ID);
 							foreach (var item in App.PathList)
 							{
-								string ret = "User ID:" + item.UserID + ",Name: " + item.Name + ",Path: " + item.Path;
+								string ret = "User ID:" + item.UserID + ",Path: " + item.Path;
 								Debug.WriteLine(ret);
 							}
 							//App.Current.MainPage = new NavigationPage(new MainPageCS());
 							Application.Current.MainPage = new MainPageCS();
+							
                             break;
 							
 						}

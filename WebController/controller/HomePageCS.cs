@@ -11,17 +11,41 @@ namespace WebController
 
         public HomePageCS()
         {
-			Title = "WebView";
-			browser = new WebView
-			{
-				VerticalOptions = LayoutOptions.FillAndExpand,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-                //if (App.UserEntity.Url)
-                Source = App.UserEntity.Url
+            Title = "WebView";
+
+            var command = new Command<string>(o => pp(o));
+
+            var settings = new ToolbarItem
+            {
+                Text = "Add",
+                Command = command,
+				CommandParameter = currentPath,
 			};
-            Debug.WriteLine("path is "+ App.UserEntity.Url + "/"+currentPath);
-			this.Content = browser;
+
+
+            ToolbarItems.Add(settings);
+
+            browser = new WebView
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                //if (App.UserEntity.Url)
+
+                Source = App.UserEntity.Url
+            };
+
+            Debug.WriteLine("path is " + App.UserEntity.Url + currentPath);
+            this.Content = browser;
         }
+
+        private void pp(string o)
+        {
+            Debug.WriteLine("currentPath is " + currentPath);
+        }
+
+
+
+		 
 
 		protected override void OnAppearing()
 		{

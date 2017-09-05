@@ -29,6 +29,8 @@ namespace WebController
 				Debug.WriteLine($"Onplatform: {Device.RuntimePlatform}");
 			}
 
+			
+
 		}
 
         async void OnItemSelected (object sender, SelectedItemChangedEventArgs e)

@@ -13,6 +13,7 @@ namespace WebController
 		{
 			
 			MainPage = new NavigationPage(new LoginPageCS());
+			
 			//MainPage = new LoginPageCS();
 
 			//if (!IsUserLoggedIn)

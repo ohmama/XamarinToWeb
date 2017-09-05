@@ -17,6 +17,7 @@ namespace WebController
 				Title = "Home Page",
 				IconSource = "contacts.png",
                 TargetType = typeof(HomePageCS),
+
                 Path = ""
 			});
 			masterPageItems.Add (new MasterPageItem {
@@ -34,7 +35,7 @@ namespace WebController
             foreach(var path in App.PathList){
 				masterPageItems.Add(new MasterPageItem
 				{
-                    Title = "Home " + path.Name,
+                    Title = path.Path,
 					IconSource = "reminders.png",
 					TargetType = typeof(HomePageCS),
                     Path = path.Path
