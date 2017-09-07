@@ -50,9 +50,9 @@ namespace WebController
 					 }
 				}else{
 					if(item.TargetType == typeof(HomePageCS)){
-                        HomePageCS.currentPath = item.Path;
+                        HomePageCS.currentPath = item.PathEntiry;
                     }else{
-                        HomePageCS.currentPath = "";
+                        HomePageCS.currentPath = null;
                     }
                     Detail = new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
 					masterPage.ListView.SelectedItem = null;

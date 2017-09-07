@@ -22,7 +22,8 @@ namespace WebController
             messageLabel = new Label() { TextColor = Color.Red, Margin = new Thickness(20, 5) };
             usernameEntry = new Entry
             {
-                Margin = new Thickness(20, 5)
+                Margin = new Thickness(20, 5),
+                Keyboard = Keyboard.Create(KeyboardFlags.None)
             };
             passwordEntry = new Entry
             {
@@ -37,7 +38,8 @@ namespace WebController
             pinEntry.TextChanged += Pin_Control;
             urlEntry = new Entry()
             {
-                Margin = new Thickness(20, 5)
+                Margin = new Thickness(20, 5),
+                Keyboard = Keyboard.Create(KeyboardFlags.None)
             };
             // Path container
             RelativeLayout pathTitleContainer = new RelativeLayout()
@@ -93,7 +95,6 @@ namespace WebController
             mContent.Children.Add(saveButton);
             mContent.Children.Add(messageLabel);
             Content = mContent;
-
         }
 
         // create more path
@@ -187,16 +188,7 @@ namespace WebController
         void OnDeleteClicked(object sender, EventArgs e){
             Button btn = (Xamarin.Forms.Button)sender;
 
-   //         // if it is parent, dont delete
-			//foreach (var pathItem in pathUIlist)
-			//{
-			//	if (!string.IsNullOrEmpty(e.OldTextValue) && pathItem.picker.SelectedItem != null && pathItem.picker.SelectedItem.ToString().Equals(e.OldTextValue))
-			//	{
-			//		messageLabel.Text = "This item is a parent item, please unbind it firstly";
-			//		thisBlock.Text = e.OldTextValue;
-			//		return;
-			//	}
-			//}
+
 
             int num = -1;
             for (int i = 0; i < pathUIlist.Count(); i++)
@@ -379,16 +371,17 @@ namespace WebController
 			}
 		}
 
-        class PathItemUI
-        {
-            public const string NO_PARENT = "No Parent";
-            public Grid grid;
-            //public Entry name;
-			public Entry path;
-            public Picker picker;
-            public int number;
-            public Button delete;
-        }
+
     }
+	public class PathItemUI
+	{
+		public const string NO_PARENT = "No Parent";
+		public Grid grid;
+		//public Entry name;
+		public Entry path;
+		public Picker picker;
+		public int number;
+		public Button delete;
+	}
 }
 

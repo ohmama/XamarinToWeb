@@ -53,11 +53,7 @@ namespace WebController
 				WidthRequest = 200,
 				HorizontalOptions = LayoutOptions.Center,
 			};
-			//grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-			//grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-			//grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-			//grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-			//grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+			
 			grid.RowDefinitions.Add(new RowDefinition { Height = 50 });
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
@@ -106,7 +102,6 @@ namespace WebController
 				Constraint.RelativeToParent((parent) => parent.Width / 2 - getSwitchWidth(parent, grid) / 2),
 				Constraint.RelativeToParent((parent) => parent.Height / 2 - getSwitchHeight(parent, grid) * 2)
 			);
-
 
             warning.Text = "";
             warning.TextColor = Color.Red;
@@ -208,9 +203,7 @@ namespace WebController
 							}
 							//App.Current.MainPage = new NavigationPage(new MainPageCS());
 							Application.Current.MainPage = new MainPageCS();
-							
                             break;
-							
 						}
 						else
 						{

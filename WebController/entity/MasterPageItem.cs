@@ -10,6 +10,6 @@ namespace WebController
 
 		public Type TargetType { get; set; }
 
-		public string Path { get; set; }
+        public HomePathEntiry PathEntiry { get; set; }
 	}
 }

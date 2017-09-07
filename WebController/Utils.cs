@@ -18,5 +18,15 @@ namespace WebController
 			Uri uriResult;
             return Uri.TryCreate(url, UriKind.Absolute, out uriResult) && Uri.IsWellFormedUriString(url,UriKind.RelativeOrAbsolute);
         }
+
+        // substring url, remove HTTP
+        public static string cutHttpstr(string url){
+            if(url.StartsWith("http")){
+                url = url.Substring(url.IndexOf(":")+3);
+            }
+            if (url.EndsWith("/"))
+               url = url.Substring(0, url.LastIndexOf("/"));
+            return url;
+        }
     }
 }

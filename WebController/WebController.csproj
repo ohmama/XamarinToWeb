@@ -45,7 +45,6 @@
     <Compile Include="controller\PersonalInfoPageCS.cs" />
     <Compile Include="controller\RegisterPageCS.cs" />
     <Compile Include="entity\MasterPageItem.cs" />
-    <Compile Include="controller\WebViewCS.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

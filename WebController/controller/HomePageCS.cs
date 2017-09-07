@@ -6,53 +6,95 @@ namespace WebController
 {
     public class HomePageCS : ContentPage
     {
-        WebView browser;
-        public static string currentPath = "";
+        public WebView browser;
+        public static HomePathEntiry currentPath;
+        public bool isLoaded;
 
         public HomePageCS()
         {
             Title = "WebView";
+            isLoaded = false;
 
-            var command = new Command<string>(o => pp(o));
-
-            var settings = new ToolbarItem
-            {
-                Text = "Add",
-                Command = command,
-				CommandParameter = currentPath,
-			};
-
-
-            ToolbarItems.Add(settings);
+            // if has parent property, add GO TO PARENT link
+            if(currentPath!=null && currentPath.Parent !=null && !currentPath.Parent.Equals(PathItemUI.NO_PARENT)){
+                var command = new Command<HomePathEntiry>(o => OnParentClick(o));
+				var settings = new ToolbarItem
+				{
+					Text = "Parent",
+					Command = command,
+					CommandParameter = currentPath,
+				};
+				ToolbarItems.Add(settings);
+			}
 
             browser = new WebView
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                //if (App.UserEntity.Url)
-
-                Source = App.UserEntity.Url
+                Source = combineUrlWithLogin(App.UserEntity.Url)
             };
+            browser.Navigated += webOnEndNavigating;
 
-            Debug.WriteLine("path is " + App.UserEntity.Url + currentPath);
+            if(currentPath == null || currentPath.Path == null){
+				Debug.WriteLine("path is " + App.UserEntity.Url);
+			}else{
+				Debug.WriteLine("path is " + App.UserEntity.Url + currentPath == null ? "" : currentPath.Path);
+			}
             this.Content = browser;
         }
 
-        private void pp(string o)
+        private void OnParentClick(HomePathEntiry o)
         {
-            Debug.WriteLine("currentPath is " + currentPath);
+            Debug.WriteLine("currentPath is " + currentPath.Path);
         }
-
-
-
-		 
 
 		protected override void OnAppearing()
 		{
 			base.OnAppearing();
-            browser.Source = App.UserEntity.Url;
+            //browser.Source = App.UserEntity.Url;
 		}
 
+        private string combineUrlWithLogin(string url){
+            string retUrl = "https://" + App.UserEntity.Name + ":" + App.UserEntity.Password + "@" + Utils.cutHttpstr(url) + "/";
+            Debug.WriteLine("request url is " + retUrl);
+            return retUrl;
+        }
+
+		private string combineUrl(string url)
+		{
+			string retUrl = "https://" + Utils.cutHttpstr(url) + "/";
+			Debug.WriteLine("request url is " + retUrl);
+			return retUrl;
+		}
+
+		void webOnNavigating(object sender, WebNavigatingEventArgs e)
+		{
+			//LoadingLabel.IsVisible = true;
+			Debug.WriteLine("on webOnNavigating");
+
+		}
+
+		void webOnEndNavigating(object sender, WebNavigatedEventArgs e)
+		{
+            //LoadingLabel.IsVisible = false;
+
+            if(!isLoaded)
+                browser.Source = combineUrl(App.UserEntity.Url);
+            isLoaded = true;
+            Debug.WriteLine("on end webOnEndNavigating");
+		}
+    }
+
+
+
+    public class HomePathEntiry{
+        public string Path;
+        public string Parent;
+
+        public HomePathEntiry(string path, string parent){
+            this.Path = path;
+            this.Parent = parent;
+        }
     }
 }
 

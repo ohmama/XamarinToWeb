@@ -17,8 +17,7 @@ namespace WebController
 				Title = "Home Page",
 				IconSource = "contacts.png",
                 TargetType = typeof(HomePageCS),
-
-                Path = ""
+                PathEntiry = null,
 			});
 			masterPageItems.Add (new MasterPageItem {
 				Title = "Personal Info Page",
@@ -33,12 +32,12 @@ namespace WebController
 
             // add all the paths to navigation
             foreach(var path in App.PathList){
-				masterPageItems.Add(new MasterPageItem
-				{
+                masterPageItems.Add(new MasterPageItem
+                {
                     Title = path.Path,
-					IconSource = "reminders.png",
-					TargetType = typeof(HomePageCS),
-                    Path = path.Path
+                    IconSource = "reminders.png",
+                    TargetType = typeof(HomePageCS),
+                    PathEntiry = new HomePathEntiry(path.Path, path.Parent)
 				});
             }
 
