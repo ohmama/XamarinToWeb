@@ -9,31 +9,35 @@ namespace WebController
 	public class LoginPageCS : ContentPage
 	{
 
-		IDictionary<Entry, Entry> pwdNext = new Dictionary<Entry, Entry>();
+        //IDictionary<Entry, Entry> pinNext = new Dictionary<Entry, Entry>();
+        List<Entry> mlist = new List<Entry>();
+
 		private YangDb _database;
 		bool alertLock;
 
 
-		Entry pwd1 = new Entry
-		{
-			HorizontalTextAlignment = TextAlignment.Center,
-			Keyboard = Keyboard.Numeric,
+        public Entry pin1 = new Entry
+        {
+            HorizontalTextAlignment = TextAlignment.Center,
+            Keyboard = Keyboard.Numeric,
+            //TextColor = Color.Transparent
 			//IsPassword = true
 		};
-		Entry pwd2 = new Entry
+		Entry pin2 = new Entry
 		{
 			HorizontalTextAlignment = TextAlignment.Center,
 			Keyboard = Keyboard.Numeric,
 			//IsPassword = true
 		};
 
-		Entry pwd3 = new Entry
+		Entry pin3 = new Entry
 		{
+            
 			HorizontalTextAlignment = TextAlignment.Center,
 			Keyboard = Keyboard.Numeric,
 			//IsPassword = true
 		};
-		Entry pwd4 = new Entry
+		Entry pin4 = new Entry
 		{
 			HorizontalTextAlignment = TextAlignment.Center,
 			Keyboard = Keyboard.Numeric,
@@ -61,20 +65,29 @@ namespace WebController
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
 
 
-			pwd1.TextChanged += Entry_TextChanged;
-			pwd2.TextChanged += Entry_TextChanged;
-			pwd3.TextChanged += Entry_TextChanged;
-			pwd4.TextChanged += Last_LastEntry;
+            pin1.TextChanged += Entry_TextChanged;
+            pin2.TextChanged += Entry_TextChanged;
+            pin3.TextChanged += Entry_TextChanged;
+            pin4.TextChanged += Last_LastEntry;
 
-			pwdNext.Add(pwd1, pwd2);
-			pwdNext.Add(pwd2, pwd3);
-			pwdNext.Add(pwd3, pwd4);
+			//pin1.Focused += Entry_Focus;
+			//pin2.Focused += Entry_Focus;
+			//pin3.Focused += Entry_Focus;
+			//pin4.Focused += Entry_Focus;
+
+			//pinNext.Add(pin1, pin2);
+			//pinNext.Add(pin2, pin3);
+			//pinNext.Add(pin3, pin4);
+			mlist.Add(pin1);
+			mlist.Add(pin2);
+			mlist.Add(pin3);
+			mlist.Add(pin4);
 
 
-			grid.Children.Add(pwd1, 0, 0);
-			grid.Children.Add(pwd2, 1, 0);
-			grid.Children.Add(pwd3, 2, 0);
-			grid.Children.Add(pwd4, 3, 0);
+			grid.Children.Add(pin1, 0, 0);
+			grid.Children.Add(pin2, 1, 0);
+			grid.Children.Add(pin3, 2, 0);
+			grid.Children.Add(pin4, 3, 0);
 
 			// login button
 			var LoginButton = new Button
@@ -119,25 +132,51 @@ namespace WebController
 			);
 
 			this.Content = mainStackLayOut;
-            //pwd1.Focus();
 		}
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            pwd1.Focus();
+            Entry_Disanable(pin1);
+            //pin1.Focus();
         }
 
+  //      void Entry_Focus(object sender, EventArgs e){
+		//	//Entry thisBlock = ();
+  //          Entry_Disanable((Entry)sender);
+
+		//}
+
+        void Entry_Disanable(Entry en){
+			pin1.IsEnabled = false;
+			pin2.IsEnabled = false;
+			pin3.IsEnabled = false;
+			pin4.IsEnabled = false;
+            en.IsEnabled = true;
+            en.Focus();
+		}
 
 		void Entry_TextChanged(object sender, TextChangedEventArgs e)
-		{
+        {
+            Debug.WriteLine(e.OldTextValue+","+e.NewTextValue);
             if (e.NewTextValue.Equals(e.OldTextValue) || (string.IsNullOrWhiteSpace(e.NewTextValue) && (string.IsNullOrWhiteSpace(e.OldTextValue))))
                 return;
 			Entry thisBlock = ((Entry)sender);
-			Entry next = new Entry();
-			pwdNext.TryGetValue(thisBlock, out next);
-			if (next != null)
-				next.Focus();
+            // delete event
+            if(string.IsNullOrWhiteSpace(e.NewTextValue) && !string.IsNullOrEmpty(e.OldTextValue)){
+				int index = mlist.IndexOf(thisBlock) - 1;
+				if (index > 3)
+				{
+					index = 0;
+				}
+				Entry next = mlist.ElementAt(index);
+				Entry_Disanable(next);
+            }
+			//Entry next = new Entry();
+			//pinNext.TryGetValue(thisBlock, out next);
+            // focus next
+			//if (next != null)
+				//next.Focus();
 
 			if (string.IsNullOrEmpty(thisBlock.Text) || !Utils.IsNumeric(thisBlock.Text))
 			{
@@ -157,6 +196,15 @@ namespace WebController
 					{
 						thisBlock.Text = thisBlock.Text.Remove(1);
 					}
+                } else{
+                    int index = mlist.IndexOf(thisBlock) + 1;
+                    if(index > 3){
+                        index = 0;
+					}
+					Entry next = mlist.ElementAt(index);
+                    Entry_Disanable(next);
+					//if(pinNext.ContainsKey(thisBlock))
+					    //Entry_Disanable(pinNext[thisBlock]);
 				}
 			}
 		}
@@ -166,6 +214,7 @@ namespace WebController
 		{
 			Entry_TextChanged(sender, e);
 			Login_CheckAsync(sender, e);
+            Entry_Disanable((Entry)sender);
 		}
 
 		// click LOGIN event
@@ -173,11 +222,11 @@ namespace WebController
 		{
 			var isSuccess = false;
 
-			if (!(string.IsNullOrEmpty(pwd1.Text) || string.IsNullOrEmpty(pwd2.Text) || string.IsNullOrEmpty(pwd3.Text) || string.IsNullOrEmpty(pwd4.Text)))
+			if (!(string.IsNullOrEmpty(pin1.Text) || string.IsNullOrEmpty(pin2.Text) || string.IsNullOrEmpty(pin3.Text) || string.IsNullOrEmpty(pin4.Text)))
 			{
-				if (Utils.IsNumeric(pwd1.Text) && Utils.IsNumeric(pwd2.Text) && Utils.IsNumeric(pwd3.Text) && Utils.IsNumeric(pwd4.Text))
+				if (Utils.IsNumeric(pin1.Text) && Utils.IsNumeric(pin2.Text) && Utils.IsNumeric(pin3.Text) && Utils.IsNumeric(pin4.Text))
 				{
-					String pin = pwd1.Text + pwd2.Text + pwd3.Text + pwd4.Text;
+					String pin = pin1.Text + pin2.Text + pin3.Text + pin4.Text;
 					var users = _database.GetUsers();
 					// todo how go check usr
 					foreach (var user in users)
@@ -196,11 +245,15 @@ namespace WebController
 								App.UserEntity.Url += "/";
 							}
 							App.PathList = _database.GetPaths(user.ID);
+
+                            // test log
 							foreach (var item in App.PathList)
 							{
-								string ret = "User ID:" + item.UserID + ",Path: " + item.Path;
+                                string ret = "User ID:" + item.UserID + ",Path: " + item.Path + ", Parent: " + item.Parent;
 								Debug.WriteLine(ret);
 							}
+
+
 							//App.Current.MainPage = new NavigationPage(new MainPageCS());
 							Application.Current.MainPage = new MainPageCS();
                             break;
@@ -222,17 +275,18 @@ namespace WebController
 			if (!isSuccess && !alertLock)
 			{
 				alertLock = true;
-				pwd1.Text = "";
-				pwd2.Text = "";
-				pwd3.Text = "";
-				pwd4.Text = "";
+				pin1.Text = "";
+				pin2.Text = "";
+				pin3.Text = "";
+				pin4.Text = "";
 
 				Debug.WriteLine("fail to login");
 				await DisplayAlert("Failed", "Please try again", "Ok");
 			}
-			pwd1.Focus();
-
+			pin1.Focus();
 		}
+
+
 
 		// click REGISTER
 		async void Register_ClickAsync(object sender, EventArgs e)

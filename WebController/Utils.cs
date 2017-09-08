@@ -28,5 +28,6 @@ namespace WebController
                url = url.Substring(0, url.LastIndexOf("/"));
             return url;
         }
+
     }
 }
