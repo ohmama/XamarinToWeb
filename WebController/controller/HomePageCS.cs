@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace WebController
@@ -10,7 +9,15 @@ namespace WebController
         public static HomePathEntiry currentPath;
         public bool isLoaded;
 
-        public HomePageCS()
+        ActivityIndicator LoadingSpinner = new ActivityIndicator
+        {
+            Color = Color.Black,
+            IsVisible = false,
+            IsRunning = false
+		};
+
+
+		public HomePageCS()
         {
             Title = "WebView";
             isLoaded = false;
@@ -26,21 +33,34 @@ namespace WebController
 				};
 				ToolbarItems.Add(settings);
 			}
-
+            //AbsoluteLayout
             browser = new WebView
             {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
                 Source = combineUrlWithLogin(App.UserEntity.Url)
             };
+            browser.Navigating += webOnNavigating;
             browser.Navigated += webOnEndNavigating;
+			AbsoluteLayout.SetLayoutFlags(browser, AbsoluteLayoutFlags.All);
+            AbsoluteLayout.SetLayoutBounds(browser,new Rectangle(0,0,1,1));
+            AbsoluteLayout.SetLayoutFlags(LoadingSpinner, AbsoluteLayoutFlags.All);
+			AbsoluteLayout.SetLayoutBounds(LoadingSpinner, new Rectangle(0, 0, 1, 1));
 
             if(currentPath == null || currentPath.Path == null){
 				Debug.WriteLine("path is " + App.UserEntity.Url);
 			}else{
 				Debug.WriteLine("path is " + App.UserEntity.Url + currentPath == null ? "" : currentPath.Path);
 			}
-            this.Content = browser;
+
+            this.Content = new AbsoluteLayout
+            {
+                Padding = new Thickness(0, 0, 0, 0),
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+                Children = {
+					browser,
+					LoadingSpinner,
+                }
+            };
         }
 
         private void OnParentClick(HomePathEntiry o)
@@ -70,6 +90,9 @@ namespace WebController
 		void webOnNavigating(object sender, WebNavigatingEventArgs e)
 		{
 			//LoadingLabel.IsVisible = true;
+            LoadingSpinner.IsVisible = true;
+			LoadingSpinner.IsRunning = true;
+
 			Debug.WriteLine("on webOnNavigating");
 
 		}
@@ -81,6 +104,8 @@ namespace WebController
             if(!isLoaded)
                 browser.Source = combineUrl(App.UserEntity.Url);
             isLoaded = true;
+            LoadingSpinner.IsVisible = false;
+            LoadingSpinner.IsRunning = false;
             Debug.WriteLine("on end webOnEndNavigating");
 		}
     }

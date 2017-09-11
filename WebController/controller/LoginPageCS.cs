@@ -14,9 +14,10 @@ namespace WebController
 
 		private YangDb _database;
 		bool alertLock;
+		//bool isSuccess;
 
 
-        public Entry pin1 = new Entry
+		public Entry pin1 = new Entry
         {
             HorizontalTextAlignment = TextAlignment.Center,
             Keyboard = Keyboard.Numeric,
@@ -49,7 +50,7 @@ namespace WebController
 
 			//InitializeComponent();
 			_database = new YangDb();
-			alertLock = false;
+			
             Title = "Login";			
             Grid grid = new Grid
 			{
@@ -70,14 +71,7 @@ namespace WebController
             pin3.TextChanged += Entry_TextChanged;
             pin4.TextChanged += Last_LastEntry;
 
-			//pin1.Focused += Entry_Focus;
-			//pin2.Focused += Entry_Focus;
-			//pin3.Focused += Entry_Focus;
-			//pin4.Focused += Entry_Focus;
-
-			//pinNext.Add(pin1, pin2);
-			//pinNext.Add(pin2, pin3);
-			//pinNext.Add(pin3, pin4);
+		
 			mlist.Add(pin1);
 			mlist.Add(pin2);
 			mlist.Add(pin3);
@@ -138,14 +132,7 @@ namespace WebController
         {
             base.OnAppearing();
             Entry_Disanable(pin1);
-            //pin1.Focus();
         }
-
-  //      void Entry_Focus(object sender, EventArgs e){
-		//	//Entry thisBlock = ();
-  //          Entry_Disanable((Entry)sender);
-
-		//}
 
         void Entry_Disanable(Entry en){
 			pin1.IsEnabled = false;
@@ -158,20 +145,22 @@ namespace WebController
 
 		void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
+            //isSuccess = false;
+            alertLock = false;
             Debug.WriteLine(e.OldTextValue+","+e.NewTextValue);
             if (e.NewTextValue.Equals(e.OldTextValue) || (string.IsNullOrWhiteSpace(e.NewTextValue) && (string.IsNullOrWhiteSpace(e.OldTextValue))))
                 return;
 			Entry thisBlock = ((Entry)sender);
             // delete event
-            if(string.IsNullOrWhiteSpace(e.NewTextValue) && !string.IsNullOrEmpty(e.OldTextValue)){
-				int index = mlist.IndexOf(thisBlock) - 1;
-				if (index > 3)
-				{
-					index = 0;
-				}
-				Entry next = mlist.ElementAt(index);
-				Entry_Disanable(next);
-            }
+    //        if(string.IsNullOrWhiteSpace(e.NewTextValue) && !string.IsNullOrEmpty(e.OldTextValue)){
+				//int index = mlist.IndexOf(thisBlock) - 1;
+				//if (index > 3)
+				//{
+				//	index = 0;
+				//}
+				//Entry next = mlist.ElementAt(index);
+				//Entry_Disanable(next);
+            //}
 			//Entry next = new Entry();
 			//pinNext.TryGetValue(thisBlock, out next);
             // focus next
@@ -184,27 +173,28 @@ namespace WebController
 			}
 			else
 			{
+                // input more than 1 charactor
 				if (e.NewTextValue.Length > 1)
 				{
-					// new text is surfix the old value
+					// when cursor is start from begining
 					if (e.NewTextValue.IndexOf(e.OldTextValue, StringComparison.Ordinal) == 0)
 					{
 						thisBlock.Text = e.NewTextValue.Substring(1, 1);
-						Debug.WriteLine(e.NewTextValue);
 					}
 					else
 					{
+                        // when cursor is start from end
 						thisBlock.Text = thisBlock.Text.Remove(1);
 					}
                 } else{
+                    // next field will focus
                     int index = mlist.IndexOf(thisBlock) + 1;
                     if(index > 3){
                         index = 0;
 					}
 					Entry next = mlist.ElementAt(index);
                     Entry_Disanable(next);
-					//if(pinNext.ContainsKey(thisBlock))
-					    //Entry_Disanable(pinNext[thisBlock]);
+					
 				}
 			}
 		}
@@ -212,15 +202,17 @@ namespace WebController
 		// last block entry event
 		void Last_LastEntry(object sender, TextChangedEventArgs e)
 		{
-			Entry_TextChanged(sender, e);
-			Login_CheckAsync(sender, e);
-            Entry_Disanable((Entry)sender);
+            if(!alertLock){
+				Entry_Disanable(pin1);
+				//Entry_TextChanged(sender, e);
+				Login_CheckAsync(sender, e);
+            }
+		
 		}
 
 		// click LOGIN event
 		async void Login_CheckAsync(object sender, EventArgs e)
 		{
-			var isSuccess = false;
 
 			if (!(string.IsNullOrEmpty(pin1.Text) || string.IsNullOrEmpty(pin2.Text) || string.IsNullOrEmpty(pin3.Text) || string.IsNullOrEmpty(pin4.Text)))
 			{
@@ -234,11 +226,9 @@ namespace WebController
 						if (user.Pin.Equals(pin))
 						{
 							App.IsUserLoggedIn = true;
-							isSuccess = true;
+							//isSuccess = true;
                             // set username to application
                             App.UserEntity = user;
-							//Navigation.InsertPageBefore(new MainPageCS(), Navigation.NavigationStack.First());
-							//await Navigation.PopToRootAsync();
 							// grab the paths
 							if (!App.UserEntity.Url.EndsWith("/", StringComparison.Ordinal))
 							{
@@ -252,7 +242,6 @@ namespace WebController
                                 string ret = "User ID:" + item.UserID + ",Path: " + item.Path + ", Parent: " + item.Parent;
 								Debug.WriteLine(ret);
 							}
-
 
 							//App.Current.MainPage = new NavigationPage(new MainPageCS());
 							Application.Current.MainPage = new MainPageCS();
@@ -272,15 +261,24 @@ namespace WebController
 				Debug.WriteLine("contain empty");
 			}
 
-			if (!isSuccess && !alertLock)
+			if (!alertLock)
 			{
 				alertLock = true;
+                pin1.TextChanged -= Entry_TextChanged;
+				pin2.TextChanged -= Entry_TextChanged;
+				pin3.TextChanged -= Entry_TextChanged;
+                pin4.TextChanged -= Last_LastEntry;
 				pin1.Text = "";
 				pin2.Text = "";
 				pin3.Text = "";
 				pin4.Text = "";
+				pin1.TextChanged += Entry_TextChanged;
+				pin2.TextChanged += Entry_TextChanged;
+				pin3.TextChanged += Entry_TextChanged;
+				pin4.TextChanged += Last_LastEntry;
 
 				Debug.WriteLine("fail to login");
+                //Entry_Disanable(pin1);
 				await DisplayAlert("Failed", "Please try again", "Ok");
 			}
 			pin1.Focus();
