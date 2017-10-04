@@ -16,19 +16,20 @@ namespace WebController
 			masterPageItems.Add (new MasterPageItem {
 				Title = "Home Page",
 				IconSource = "contacts.png",
+
                 TargetType = typeof(HomePageCS),
-                PathEntiry = null,
+                PathEntity = null,
 			});
 			masterPageItems.Add (new MasterPageItem {
 				Title = "Personal Info Page",
 				IconSource = "todo.png",
                 TargetType = typeof(PersonalInfoPageCS)
 			});
-			masterPageItems.Add (new MasterPageItem {
-				Title = "Developer Page",
-				IconSource = "reminders.png",
-				TargetType = typeof(DeveloperPageCS)
-			});
+			//masterPageItems.Add (new MasterPageItem {
+			//	Title = "Developer Page",
+			//	IconSource = "reminders.png",
+			//	TargetType = typeof(DeveloperPageCS)
+			//});
 
             // add all the paths to navigation
             foreach(var path in App.PathList){
@@ -37,7 +38,7 @@ namespace WebController
                     Title = path.Path,
                     IconSource = "reminders.png",
                     TargetType = typeof(HomePageCS),
-                    PathEntiry = new HomePathEntiry(path.Path, path.Parent)
+                    PathEntity = new HomePathEntity(path.Path, path.Parent)
 				});
             }
 
@@ -45,16 +46,16 @@ namespace WebController
 			{
 				Title = "Logout",
 				IconSource = "reminders.png",
-                TargetType = typeof(LoginPageCS)
+                TargetType = typeof(KeyPadCS)
 			});
 
 			listView = new ListView {
 				ItemsSource = masterPageItems,
 				ItemTemplate = new DataTemplate (() => {
-					var imageCell = new ImageCell ();
-					imageCell.SetBinding (TextCell.TextProperty, "Title");
-					imageCell.SetBinding (ImageCell.ImageSourceProperty, "IconSource");
-					return imageCell;
+                    var textCell = new TextCell();
+                    textCell.SetBinding(TextCell.TextProperty, "Title");
+                    return textCell;
+
 				}),
 				VerticalOptions = LayoutOptions.FillAndExpand,
 				SeparatorVisibility = SeparatorVisibility.None

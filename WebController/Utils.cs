@@ -21,12 +21,17 @@ namespace WebController
 
         // substring url, remove HTTP
         public static string cutHttpstr(string url){
-            if(url.StartsWith("http")){
-                url = url.Substring(url.IndexOf(":")+3);
+            if(url.StartsWith("http", StringComparison.Ordinal))
+            {
+                url = url.Substring(url.IndexOf(":", StringComparison.Ordinal) + 3);
             }
             if (url.EndsWith("/"))
                url = url.Substring(0, url.LastIndexOf("/"));
             return url;
+        }
+
+        public static string formatToHttpsUrl(string url){
+            return "https://" + cutHttpstr(url) + "/";
         }
 
     }

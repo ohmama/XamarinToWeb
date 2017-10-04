@@ -2,7 +2,7 @@
 using SQLite.Net.Attributes;
 namespace WebController
 {
-    public class PathEntity:BaseEntiry
+    public class PathEntity:BaseEntity
     {
         public int UserID { get; set; }
 		//public string Name { get; set; }

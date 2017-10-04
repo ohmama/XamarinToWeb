@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using FormsPinView.iOS;
 using Foundation;
 using UIKit;
 
@@ -15,7 +15,7 @@ namespace WebController.iOS
             global::Xamarin.Forms.Forms.Init();
 
             LoadApplication(new App());
-
+            PinItemViewRenderer.Init();
             return base.FinishedLaunching(app, options);
         }
     }

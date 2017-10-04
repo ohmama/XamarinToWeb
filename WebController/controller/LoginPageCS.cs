@@ -3,51 +3,50 @@ using Xamarin.Forms;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebController
 {
 	public class LoginPageCS : ContentPage
 	{
-
-        //IDictionary<Entry, Entry> pinNext = new Dictionary<Entry, Entry>();
         List<Entry> mlist = new List<Entry>();
 
 		private YangDb _database;
 		bool alertLock;
-		//bool isSuccess;
-
 
 		public Entry pin1 = new Entry
         {
             HorizontalTextAlignment = TextAlignment.Center,
             Keyboard = Keyboard.Numeric,
+            BackgroundColor = Color.FromRgba(200,200,200,150),
             //TextColor = Color.Transparent
-			//IsPassword = true
+			IsPassword = true
 		};
 		Entry pin2 = new Entry
 		{
 			HorizontalTextAlignment = TextAlignment.Center,
+			BackgroundColor = Color.FromRgba(200, 200, 200, 150),
 			Keyboard = Keyboard.Numeric,
-			//IsPassword = true
+			IsPassword = true
 		};
 
 		Entry pin3 = new Entry
 		{
-            
 			HorizontalTextAlignment = TextAlignment.Center,
 			Keyboard = Keyboard.Numeric,
-			//IsPassword = true
+			BackgroundColor = Color.FromRgba(200, 200, 200, 150),
+   			IsPassword = true
 		};
 		Entry pin4 = new Entry
 		{
 			HorizontalTextAlignment = TextAlignment.Center,
 			Keyboard = Keyboard.Numeric,
-			//IsPassword = true
+            BackgroundColor = Color.FromRgba(200, 200, 200, 150),
+			IsPassword = true
 		};
         Label warning = new Label();
 		public LoginPageCS()
 		{
-
 			//InitializeComponent();
 			_database = new YangDb();
 			
@@ -77,7 +76,6 @@ namespace WebController
 			mlist.Add(pin3);
 			mlist.Add(pin4);
 
-
 			grid.Children.Add(pin1, 0, 0);
 			grid.Children.Add(pin2, 1, 0);
 			grid.Children.Add(pin3, 2, 0);
@@ -92,15 +90,15 @@ namespace WebController
 			{
 				Text = "Register"
 			};
-			LoginButton.Clicked += Login_CheckAsync;
+			LoginButton.Clicked += Login;
 			RegisterButton.Clicked += Register_ClickAsync;
+
 
 			RelativeLayout mainStackLayOut = new RelativeLayout
 			{
 				BackgroundColor = Color.Yellow,
 				VerticalOptions = LayoutOptions.FillAndExpand,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
-				//Orientation = StackOrientation.Vertical
 			};
 
 			Func<View, View, double> getSwitchWidth = (parent, self) => self.Measure(parent.Width, parent.Height).Request.Width;
@@ -117,7 +115,7 @@ namespace WebController
 				Constraint.RelativeToParent((parent) => parent.Height / 2 - getSwitchHeight(parent, grid) -  100)
 			);
 
-			mainStackLayOut.Children.Add(LoginButton,
+            mainStackLayOut.Children.Add(LoginButton,
 										 Constraint.RelativeToParent((parent) => parent.Width / 2 - getSwitchWidth(parent, LoginButton) / 2),
 										 Constraint.RelativeToParent(parent => parent.Height / 2));
 			mainStackLayOut.Children.Add(RegisterButton,
@@ -151,21 +149,6 @@ namespace WebController
             if (e.NewTextValue.Equals(e.OldTextValue) || (string.IsNullOrWhiteSpace(e.NewTextValue) && (string.IsNullOrWhiteSpace(e.OldTextValue))))
                 return;
 			Entry thisBlock = ((Entry)sender);
-            // delete event
-    //        if(string.IsNullOrWhiteSpace(e.NewTextValue) && !string.IsNullOrEmpty(e.OldTextValue)){
-				//int index = mlist.IndexOf(thisBlock) - 1;
-				//if (index > 3)
-				//{
-				//	index = 0;
-				//}
-				//Entry next = mlist.ElementAt(index);
-				//Entry_Disanable(next);
-            //}
-			//Entry next = new Entry();
-			//pinNext.TryGetValue(thisBlock, out next);
-            // focus next
-			//if (next != null)
-				//next.Focus();
 
 			if (string.IsNullOrEmpty(thisBlock.Text) || !Utils.IsNumeric(thisBlock.Text))
 			{
@@ -203,11 +186,9 @@ namespace WebController
 		void Last_LastEntry(object sender, TextChangedEventArgs e)
 		{
             if(!alertLock){
-				Entry_Disanable(pin1);
-				//Entry_TextChanged(sender, e);
+				//Entry_Disanable(pin1);
 				Login_CheckAsync(sender, e);
             }
-		
 		}
 
 		// click LOGIN event
@@ -229,11 +210,12 @@ namespace WebController
 							//isSuccess = true;
                             // set username to application
                             App.UserEntity = user;
-							// grab the paths
-							if (!App.UserEntity.Url.EndsWith("/", StringComparison.Ordinal))
-							{
-								App.UserEntity.Url += "/";
-							}
+                            // grab the paths
+                            //if (!App.UserEntity.Url.EndsWith("/", StringComparison.Ordinal))
+                            //{
+                            //	App.UserEntity.Url += "/";
+                            //}
+                            //App.UserEntity.Url = App.UserEntity.Url;
 							App.PathList = _database.GetPaths(user.ID);
 
                             // test log
@@ -243,9 +225,16 @@ namespace WebController
 								Debug.WriteLine(ret);
 							}
 
-							//App.Current.MainPage = new NavigationPage(new MainPageCS());
-							Application.Current.MainPage = new MainPageCS();
-                            break;
+                            await Task.Run(async () =>
+                              {
+                                 await Task.Delay(0);
+                                 Device.BeginInvokeOnMainThread(() =>
+                                  {
+                                      Application.Current.MainPage = new MainPageCS();
+                                  });
+                              });
+
+                            return;
 						}
 						else
 						{
@@ -284,12 +273,15 @@ namespace WebController
 			pin1.Focus();
 		}
 
+        void Login(object sender, EventArgs e){
+			Application.Current.MainPage = new MainPageCS();
 
+		}
 
 		// click REGISTER
 		async void Register_ClickAsync(object sender, EventArgs e)
 		{
-			await Navigation.PushAsync(new RegisterPageCS(this));
+            //await Navigation.PushAsync(new RegisterPageCS(this));
 		}
 	}
 }

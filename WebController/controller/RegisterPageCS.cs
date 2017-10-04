@@ -13,7 +13,9 @@ namespace WebController
 		Entry usernameEntry, passwordEntry, pinEntry, urlEntry;
 		Label messageLabel;
 
-		public RegisterPageCS(LoginPageCS parent)
+        string Url = "https://cirro.nimbus.co.nz/zd1/";
+
+        public RegisterPageCS(KeyPadCS parent)
 		{
 			_database = new YangDb();
             messageLabel = new Label{Margin = new Thickness(20, 5),TextColor = Color.Red };
@@ -40,7 +42,8 @@ namespace WebController
 			{
 				Placeholder = "Input your prefered URL",
                 Margin = new Thickness(20, 5),
-				Keyboard = Keyboard.Create(KeyboardFlags.None)
+				Keyboard = Keyboard.Create(KeyboardFlags.None),
+                Text = Url
 			};
 
 			var signUpButton = new Button
@@ -92,7 +95,7 @@ namespace WebController
 					if (rootPage != null)
 					{
 						App.IsUserLoggedIn = true;
-						Navigation.InsertPageBefore(new LoginPageCS(), Navigation.NavigationStack.First());
+                        Navigation.InsertPageBefore(new KeyPadCS(), Navigation.NavigationStack.First());
 						await Navigation.PopToRootAsync();
 					}
                 }else{

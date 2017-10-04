@@ -7,6 +7,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using FormsPinView.Droid;
 
 namespace WebController.Droid
 {
@@ -21,7 +22,7 @@ namespace WebController.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-
+            PinItemViewRenderer.Init();
             LoadApplication(new App());
         }
     }

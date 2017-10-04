@@ -60,7 +60,12 @@ namespace WebController
 				path.CreatedOn = DateTime.Now;
             _connection.Insert(path);
 		}
-        public void DeletePath(PathEntity path){
+        public void UpdatePath(PathEntity path)
+        {
+            _connection.Update(path);
+        }
+
+		public void DeletePath(PathEntity path){
             _connection.Delete(path);
         }
 		

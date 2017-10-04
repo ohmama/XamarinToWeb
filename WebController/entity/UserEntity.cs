@@ -3,7 +3,7 @@ using SQLite.Net.Attributes;
 
 namespace WebController
 {
-    public class UserEntity:BaseEntiry
+    public class UserEntity:BaseEntity
     {
 
 		public string Name { get; set; }

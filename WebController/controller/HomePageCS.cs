@@ -6,25 +6,30 @@ namespace WebController
     public class HomePageCS : ContentPage
     {
         public WebView browser;
-        public static HomePathEntiry currentPath;
+        public static HomePathEntity currentPath;
         public bool isLoaded;
 
         ActivityIndicator LoadingSpinner = new ActivityIndicator
         {
-            Color = Color.Black,
-            IsVisible = false,
-            IsRunning = false
+            Color = Color.Gray,
+            IsVisible = true,
+            IsRunning = true
 		};
 
 
 		public HomePageCS()
         {
-            Title = "WebView";
+
+			Title = "WebView";
             isLoaded = false;
 
-            // if has parent property, add GO TO PARENT link
-            if(currentPath!=null && currentPath.Parent !=null && !currentPath.Parent.Equals(PathItemUI.NO_PARENT)){
-                var command = new Command<HomePathEntiry>(o => OnParentClick(o));
+            string loadingUrl = loginUrl();
+
+
+			//string loadUrl = combineUrlWithLogin(App.UserEntity.Url);
+			// if has parent property, add GO TO PARENT link
+			if(currentPath!=null && currentPath.Parent !=null && !currentPath.Parent.Equals(PathItemUI.NO_PARENT)){
+                var command = new Command<HomePathEntity>(o => OnParentClick());
 				var settings = new ToolbarItem
 				{
 					Text = "Parent",
@@ -33,23 +38,25 @@ namespace WebController
 				};
 				ToolbarItems.Add(settings);
 			}
-            //AbsoluteLayout
-            browser = new WebView
+            // if this is the tab click, then goto tag page
+            if (currentPath!=null && !string.IsNullOrEmpty(currentPath.Path)){
+                loadingUrl = loginUrl() + currentPath.Path + "/";
+			}
+			Debug.WriteLine("first request path is " + loadingUrl);
+
+			//AbsoluteLayout
+			browser = new WebView
             {
-                Source = combineUrlWithLogin(App.UserEntity.Url)
+                Source = loadingUrl
             };
-            browser.Navigating += webOnNavigating;
+            //browser.Navigating += webOnNavigating;
             browser.Navigated += webOnEndNavigating;
 			AbsoluteLayout.SetLayoutFlags(browser, AbsoluteLayoutFlags.All);
             AbsoluteLayout.SetLayoutBounds(browser,new Rectangle(0,0,1,1));
-            AbsoluteLayout.SetLayoutFlags(LoadingSpinner, AbsoluteLayoutFlags.All);
-			AbsoluteLayout.SetLayoutBounds(LoadingSpinner, new Rectangle(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(LoadingSpinner, AbsoluteLayoutFlags.PositionProportional);
+			AbsoluteLayout.SetLayoutBounds(LoadingSpinner, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
 
-            if(currentPath == null || currentPath.Path == null){
-				Debug.WriteLine("path is " + App.UserEntity.Url);
-			}else{
-				Debug.WriteLine("path is " + App.UserEntity.Url + currentPath == null ? "" : currentPath.Path);
-			}
+
 
             this.Content = new AbsoluteLayout
             {
@@ -63,10 +70,12 @@ namespace WebController
             };
         }
 
-        private void OnParentClick(HomePathEntiry o)
+        private void OnParentClick()
         {
-            Debug.WriteLine("currentPath is " + currentPath.Path);
-        }
+             
+            Debug.WriteLine("loading parent path is " + baseUrl() + currentPath.Parent + "/");
+            browser.Source = baseUrl() + currentPath.Parent + "/";
+		}
 
 		protected override void OnAppearing()
 		{
@@ -74,49 +83,45 @@ namespace WebController
             //browser.Source = App.UserEntity.Url;
 		}
 
-        private string combineUrlWithLogin(string url){
-            string retUrl = "https://" + App.UserEntity.Name + ":" + App.UserEntity.Password + "@" + Utils.cutHttpstr(url) + "/";
-            Debug.WriteLine("request url is " + retUrl);
-            return retUrl;
+        private string loginUrl(){
+            return "https://" + App.UserEntity.Name + ":" + App.UserEntity.Password + "@" + Utils.cutHttpstr(App.UserEntity.Url) + "/";
         }
 
-		private string combineUrl(string url)
+		private string baseUrl()
 		{
-			string retUrl = "https://" + Utils.cutHttpstr(url) + "/";
-			Debug.WriteLine("request url is " + retUrl);
-			return retUrl;
+            return Utils.formatToHttpsUrl(App.UserEntity.Url);
 		}
 
 		void webOnNavigating(object sender, WebNavigatingEventArgs e)
 		{
-			//LoadingLabel.IsVisible = true;
             LoadingSpinner.IsVisible = true;
 			LoadingSpinner.IsRunning = true;
-
-			Debug.WriteLine("on webOnNavigating");
-
 		}
 
 		void webOnEndNavigating(object sender, WebNavigatedEventArgs e)
 		{
-            //LoadingLabel.IsVisible = false;
-
-            if(!isLoaded)
-                browser.Source = combineUrl(App.UserEntity.Url);
+            // have to load it again, otherwise page will not show up correctly
+            if(!isLoaded){
+                string loadingPath = baseUrl();
+                if (currentPath != null){
+                    loadingPath = baseUrl() + currentPath.Path + "/";
+				}
+				Debug.WriteLine("webOnEndNavigating request url is " + loadingPath);
+				browser.Source = loadingPath;
+			}
             isLoaded = true;
             LoadingSpinner.IsVisible = false;
             LoadingSpinner.IsRunning = false;
-            Debug.WriteLine("on end webOnEndNavigating");
 		}
     }
 
 
 
-    public class HomePathEntiry{
+    public class HomePathEntity{
         public string Path;
         public string Parent;
 
-        public HomePathEntiry(string path, string parent){
+        public HomePathEntity(string path, string parent){
             this.Path = path;
             this.Parent = parent;
         }

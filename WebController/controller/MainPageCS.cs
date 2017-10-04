@@ -28,9 +28,6 @@ namespace WebController
 			{
 				Debug.WriteLine($"Onplatform: {Device.RuntimePlatform}");
 			}
-
-			
-
 		}
 
         async void OnItemSelected (object sender, SelectedItemChangedEventArgs e)
@@ -50,7 +47,7 @@ namespace WebController
 					 }
 				}else{
 					if(item.TargetType == typeof(HomePageCS)){
-                        HomePageCS.currentPath = item.PathEntiry;
+                        HomePageCS.currentPath = item.PathEntity;
                     }else{
                         HomePageCS.currentPath = null;
                     }

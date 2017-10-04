@@ -11,8 +11,10 @@ namespace WebController
 
 		public App ()
 		{
-			
-			MainPage = new NavigationPage(new LoginPageCS());
+
+			MainPage = new NavigationPage(new KeyPadCS());
+            //MainPage = new NavigationPage(new PinLoginCS());
+            //MainPage = new MainPageCS();
 			
 			//MainPage = new LoginPageCS();
 
