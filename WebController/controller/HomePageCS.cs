@@ -25,7 +25,6 @@ namespace WebController
 
             string loadingUrl = loginUrl();
 
-
 			//string loadUrl = combineUrlWithLogin(App.UserEntity.Url);
 			// if has parent property, add GO TO PARENT link
 			if(currentPath!=null && currentPath.Parent !=null && !currentPath.Parent.Equals(PathItemUI.NO_PARENT)){

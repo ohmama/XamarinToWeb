@@ -175,8 +175,6 @@ namespace WebController
 					new PropertyChangedEventArgs(propertyName));
 		}
 
-
-
 		// click LOGIN event
 		async void Login_CheckAsync(string pin)
 		{
@@ -196,13 +194,6 @@ namespace WebController
 					}
 					App.PathList = _database.GetPaths(user.ID);
 
-					// test log
-					foreach (var item in App.PathList)
-					{
-						string ret = "User ID:" + item.UserID + ",Path: " + item.Path + ", Parent: " + item.Parent;
-						Debug.WriteLine(ret);
-					}
-
 					await Task.Run(async () =>
 					{
                         
@@ -216,8 +207,20 @@ namespace WebController
 				}
 				else
 				{
-					Debug.WriteLine("Pin not match");
+   					Debug.WriteLine("Pin not match");
 				}
+
+			}
+			if (!App.IsUserLoggedIn)
+			{
+				await Task.Run(async () =>
+				{
+					await Task.Delay(0);
+					Device.BeginInvokeOnMainThread(() =>
+					{
+						Application.Current.MainPage.DisplayAlert("Failed", "Pin not match", "Ok");
+					});
+				});
 			}
             inputString = Pin1 = Pin2 = Pin3 = Pin4 = "";
 			//await DisplayAlert("Failed", "Please try again", "Ok");
@@ -229,10 +232,6 @@ namespace WebController
 
 		}
 
-		// click REGISTER
-		async void Register_ClickAsync(object sender, EventArgs e)
-		{
-			//await Navigation.PushAsync(new RegisterPageCS(this));
-		}
+
     }
 }
