@@ -64,12 +64,10 @@ namespace WebController
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
 
-
             pin1.TextChanged += Entry_TextChanged;
             pin2.TextChanged += Entry_TextChanged;
             pin3.TextChanged += Entry_TextChanged;
             pin4.TextChanged += Last_LastEntry;
-
 		
 			mlist.Add(pin1);
 			mlist.Add(pin2);

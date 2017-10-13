@@ -33,7 +33,7 @@ namespace WebController
 			};
 			pinEntry = new Entry()
 			{
-				Placeholder = "Input 4 digit pin",
+				Placeholder = "Input 5 digit pin",
 				Keyboard = Keyboard.Numeric,
                 Margin = new Thickness(20, 5)
 			};
@@ -62,7 +62,7 @@ namespace WebController
 					usernameEntry,
 					new Label { Text = "Password", Margin= new Thickness(20,5) },
 					passwordEntry,
-					new Label { Text = "4 Digital Pin", Margin= new Thickness(20,5) },
+					new Label { Text = "5 Digital Pin", Margin= new Thickness(20,5) },
                     pinEntry,
 					new Label { Text = "URL", Margin= new Thickness(20,5) },
 					urlEntry,
@@ -140,9 +140,9 @@ namespace WebController
 				{
 					thisBlock.Text = e.OldTextValue;
 				}
-				else if (pinStr.Length > 4)
+				else if (pinStr.Length > 5)
 				{
-					thisBlock.Text = pinStr.Remove(4);
+					thisBlock.Text = pinStr.Remove(5);
 				}
 			}
 		}

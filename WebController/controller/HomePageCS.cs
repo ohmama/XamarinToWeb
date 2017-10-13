@@ -16,7 +16,6 @@ namespace WebController
             IsRunning = true
 		};
 
-
 		public HomePageCS()
         {
 
@@ -54,8 +53,6 @@ namespace WebController
             AbsoluteLayout.SetLayoutBounds(browser,new Rectangle(0,0,1,1));
 			AbsoluteLayout.SetLayoutFlags(LoadingSpinner, AbsoluteLayoutFlags.PositionProportional);
 			AbsoluteLayout.SetLayoutBounds(LoadingSpinner, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
-
-
 
             this.Content = new AbsoluteLayout
             {
@@ -113,8 +110,6 @@ namespace WebController
             LoadingSpinner.IsRunning = false;
 		}
     }
-
-
 
     public class HomePathEntity{
         public string Path;

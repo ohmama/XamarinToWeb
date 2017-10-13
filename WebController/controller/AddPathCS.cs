@@ -89,7 +89,6 @@ namespace WebController
             // edit exist one
             if (pathEntity != null)
             {
-
                 if (string.IsNullOrEmpty(pathStr))
                     //empty warning
                     messageLabel.Text = "Please fill the name with path";
@@ -118,7 +117,6 @@ namespace WebController
                 App.PathList = _database.GetPaths(App.UserEntity.ID);
 				await Navigation.PopAsync();
 			}
-
 		}
 
         async void OnDelete(object sender, EventArgs e)

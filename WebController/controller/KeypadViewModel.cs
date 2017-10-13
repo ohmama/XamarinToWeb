@@ -16,6 +16,7 @@ namespace WebController
 		string pin2 = "";
 		string pin3 = "";
 		string pin4 = "";
+		string pin5 = "";
 		char[] specialChars = { '*', '#' };
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -24,7 +25,6 @@ namespace WebController
 		public KeypadViewModel()
 		{
 			_database = new YangDb();
-
 
 			this.AddCharCommand = new Command<string>((key) =>
 			{
@@ -55,6 +55,9 @@ namespace WebController
                     case 3:
 						Pin4 = "";
 						break;
+					case 4:
+						Pin5 = "";
+						break;
                 }
 
 
@@ -75,7 +78,6 @@ namespace WebController
 				{
 					inputString = value;
 					OnPropertyChanged("InputString");
-                    //this.DisplayText = FormatText(inputString);
                     Debug.WriteLine("in input string -> "+ inputString);
                     formatPin(inputString);
 
@@ -90,7 +92,7 @@ namespace WebController
         public void formatPin(string inputStr){
             if(!string.IsNullOrEmpty(inputStr)){
                 int len = inputStr.Length;
-                if(len <= 4){
+                if(len <= 5){
 					switch (len)
 					{
 						case 1:
@@ -104,6 +106,9 @@ namespace WebController
 							break;
 						case 4:
 							Pin4 = "●";
+							break;
+						case 5:
+							Pin5 = "●";
                             Login_CheckAsync(inputStr);
 							break;
 					}
@@ -161,6 +166,19 @@ namespace WebController
 				}
 			}
 			get { return pin4; }
+		}
+
+		public string Pin5
+		{
+			protected set
+			{
+				if (pin5 != value)
+				{
+					pin5 = value;
+					OnPropertyChanged("Pin5");
+				}
+			}
+			get { return pin5; }
 		}
 
 		// ICommand implementations
@@ -222,16 +240,12 @@ namespace WebController
 					});
 				});
 			}
-            inputString = Pin1 = Pin2 = Pin3 = Pin4 = "";
-			//await DisplayAlert("Failed", "Please try again", "Ok");
+            inputString = Pin1 = Pin2 = Pin3 = Pin4 = Pin5 = "";
 		}
 
 		void Login(object sender, EventArgs e)
 		{
 			Application.Current.MainPage = new MainPageCS();
-
 		}
-
-
     }
 }
