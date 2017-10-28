@@ -35,7 +35,9 @@ namespace WebController
 			var item = e.SelectedItem as MasterPageItem;
 
 			if (item != null) {
-                if (item.TargetType == typeof(LoginPageCS))
+                if (item.TargetType == typeof(AddPathCS)){
+                    
+                }else if (item.TargetType == typeof(LoginPageCS))
                 {
 					var answer = await DisplayAlert("Logout", "Do you want to logout?", "Yes", "No");
 		            if(answer==true){
