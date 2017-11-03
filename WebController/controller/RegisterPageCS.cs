@@ -19,6 +19,7 @@ namespace WebController
 		{
 			_database = new YangDb();
             messageLabel = new Label{Margin = new Thickness(20, 5),TextColor = Color.Red };
+            this.BackgroundColor = Color.FromHex("BBDEFB");
             usernameEntry = new Entry
             {
                 Placeholder = "Input username",
@@ -48,7 +49,8 @@ namespace WebController
 
 			var signUpButton = new Button
 			{
-				Text = "Sign Up"
+                Text = "Sign Up",
+                BackgroundColor = Color.White
 			};
 			signUpButton.Clicked += OnSignUpButtonClicked;
 

@@ -26,6 +26,7 @@ namespace WebController
         {
             Debug.WriteLine("on construction");
             _database = new YangDb();
+            this.BackgroundColor = Color.FromHex("BBDEFB");
             App.PathList = _database.GetPaths(App.UserEntity.ID);
             messageLabel = new Label() { TextColor = Color.Red, Margin = new Thickness(20, 5) };
             usernameEntry = new Entry
@@ -62,7 +63,7 @@ namespace WebController
                            );
 
             // add ADD button
-            Button btnAdd = new Button() { Text = "Add More Path" };
+            Button btnAdd = new Button() { Text = "Add More Path" ,BackgroundColor = Color.White};
             btnAdd.Clicked += OnAddMoreClickedAsync;
             pathTitleContainer.Children.Add(btnAdd,
                             Constraint.RelativeToView(pathTitle, (parent, sibling) => { return sibling.X + sibling.Width + 20; }),
@@ -73,6 +74,8 @@ namespace WebController
             {
                 Text = "Save",
                 MinimumHeightRequest = 40,
+                BackgroundColor = Color.White,
+                Margin = new Thickness(20, 5)
             };
             saveButton.Clicked += OnSaveButtonClicked;
 
@@ -137,6 +140,7 @@ namespace WebController
                 Text = "Edit",
                 FontSize = 12,
                 HeightRequest = 40,
+                BackgroundColor = Color.White
             };
             btnEdit.Clicked += OnEditClicked;
             btnEdit.CommandParameter = pathEntity;

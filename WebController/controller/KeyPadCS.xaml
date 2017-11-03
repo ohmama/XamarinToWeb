@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:WebController;assembly=WebController" xmlns:controls="clr-namespace:WebController" x:Class="WebController.KeyPadCS">
-    <RelativeLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <Button x:Name="Register" Clicked="Register_ClickAsync" Text="Register" WidthRequest="100" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=.5, Constant = -50}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=.85}">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:WebController;assembly=WebController" xmlns:controls="clr-namespace:WebController" x:Class="WebController.KeyPadCS" >
+    <RelativeLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="#BBDEFB">
+        <Button x:Name="Register" Clicked="Register_ClickAsync" Text="Register" WidthRequest="100" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=.5, Constant = -50}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=.85}" BackgroundColor="White" BorderColor="#90CAF9">
         </Button>
         <Grid WidthRequest="200" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=.5, Constant = -100}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=.2}">
             <Grid.BindingContext>
@@ -21,11 +21,11 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Label Text="{Binding Pin1}" Grid.Column="0" Grid.Row="0" FontSize="30" BackgroundColor="Gray" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
-            <Label Text="{Binding Pin2}" Grid.Column="1" Grid.Row="0" FontSize="30" BackgroundColor="Gray" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
-            <Label Text="{Binding Pin3}" Grid.Column="2" Grid.Row="0" FontSize="30" BackgroundColor="Gray" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
-            <Label Text="{Binding Pin4}" Grid.Column="3" Grid.Row="0" FontSize="30" BackgroundColor="Gray" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
-            <Label Text="{Binding Pin5}" Grid.Column="4" Grid.Row="0" FontSize="30" BackgroundColor="Gray" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding Pin1}" Grid.Column="0" Grid.Row="0" FontSize="30" BackgroundColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding Pin2}" Grid.Column="1" Grid.Row="0" FontSize="30" BackgroundColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding Pin3}" Grid.Column="2" Grid.Row="0" FontSize="30" BackgroundColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding Pin4}" Grid.Column="3" Grid.Row="0" FontSize="30" BackgroundColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding Pin5}" Grid.Column="4" Grid.Row="0" FontSize="30" BackgroundColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
                 
             <!-- Internal Grid for top row of items -->
             <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5">
@@ -38,19 +38,19 @@
                         <ColumnDefinition Width="60" />
                         <ColumnDefinition Width="60" />
                     </Grid.ColumnDefinitions>
-                    <Button Text="1" Command="{Binding AddCharCommand}" CommandParameter="1" Grid.Row="1" Grid.Column="0" />
-                    <Button Text="2" Command="{Binding AddCharCommand}" CommandParameter="2" Grid.Row="1" Grid.Column="1" />
-                    <Button Text="3" Command="{Binding AddCharCommand}" CommandParameter="3" Grid.Row="1" Grid.Column="2" />
-                    <Button Text="4" Command="{Binding AddCharCommand}" CommandParameter="4" Grid.Row="2" Grid.Column="0" />
-                    <Button Text="5" Command="{Binding AddCharCommand}" CommandParameter="5" Grid.Row="2" Grid.Column="1" />
-                    <Button Text="6" Command="{Binding AddCharCommand}" CommandParameter="6" Grid.Row="2" Grid.Column="2" />
-                    <Button Text="7" Command="{Binding AddCharCommand}" CommandParameter="7" Grid.Row="3" Grid.Column="0" />
-                    <Button Text="8" Command="{Binding AddCharCommand}" CommandParameter="8" Grid.Row="3" Grid.Column="1" />
-                    <Button Text="9" Command="{Binding AddCharCommand}" CommandParameter="9" Grid.Row="3" Grid.Column="2" />
+                    <Button Text="1" Command="{Binding AddCharCommand}" CommandParameter="1" Grid.Row="1" Grid.Column="0" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="2" Command="{Binding AddCharCommand}" CommandParameter="2" Grid.Row="1" Grid.Column="1" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="3" Command="{Binding AddCharCommand}" CommandParameter="3" Grid.Row="1" Grid.Column="2" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="4" Command="{Binding AddCharCommand}" CommandParameter="4" Grid.Row="2" Grid.Column="0" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="5" Command="{Binding AddCharCommand}" CommandParameter="5" Grid.Row="2" Grid.Column="1" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="6" Command="{Binding AddCharCommand}" CommandParameter="6" Grid.Row="2" Grid.Column="2" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="7" Command="{Binding AddCharCommand}" CommandParameter="7" Grid.Row="3" Grid.Column="0" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="8" Command="{Binding AddCharCommand}" CommandParameter="8" Grid.Row="3" Grid.Column="1" BackgroundColor="White" BorderColor="#90CAF9"/>
+                    <Button Text="9" Command="{Binding AddCharCommand}" CommandParameter="9" Grid.Row="3" Grid.Column="2" BackgroundColor="White" BorderColor="#90CAF9"/>
                     <!--        <Button Text="*" Command="{Binding AddCharCommand}" CommandParameter="*" Grid.Row="4" Grid.Column="0" />-->
-                    <Button Text="0" Command="{Binding AddCharCommand}" CommandParameter="0" Grid.Row="4" Grid.Column="1" />
+                    <Button Text="0" Command="{Binding AddCharCommand}" CommandParameter="0" Grid.Row="4" Grid.Column="1" BackgroundColor="White" BorderColor="#90CAF9"/>
                     <!--        <Button Text="#" Command="{Binding AddCharCommand}" CommandParameter="#" Grid.Row="4" Grid.Column="2" />-->
-                    <Button Text="DEL" Command="{Binding DeleteCharCommand}" Grid.Row="4" Grid.Column="2" />
+                    <Button Text="DEL" Command="{Binding DeleteCharCommand}" Grid.Row="4" Grid.Column="2" BackgroundColor="White" BorderColor="#90CAF9"/>
                 </Grid>
             </Grid>
         </Grid>

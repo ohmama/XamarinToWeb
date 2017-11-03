@@ -15,6 +15,8 @@ namespace WebController
         public AddPathCS(PathEntity pathEntity)
         {
             this.pathEntity = pathEntity;
+            this.BackgroundColor = Color.FromHex("BBDEFB");
+
 			_database = new YangDb();
 			App.PathList = _database.GetPaths(App.UserEntity.ID);
 
@@ -56,7 +58,7 @@ namespace WebController
             // warnging label
             messageLabel = new Label() { TextColor = Color.Red, Margin = new Thickness(20, 5) };
 
-            Button btnSave = new Button() { Text = "Save" };
+            Button btnSave = new Button() { Text = "Save" , BackgroundColor = Color.White};
             btnSave.Clicked += OnSaveAsync;
             btnCtn.Children.Add(btnSave, 0, 0);
 
@@ -64,13 +66,14 @@ namespace WebController
             if(pathEntity!=null){
                 PathEntry.Text = pathEntity.Path;
 
-				Button btnDelete = new Button() { Text = "Delete" };
+                Button btnDelete = new Button() { Text = "Delete" , BackgroundColor = Color.White};
 				btnDelete.Clicked += OnDelete;
 				btnCtn.Children.Add(btnDelete, 0, 1);
 			}
 
             Content = new StackLayout()
             {
+                BackgroundColor = Color.FromHex("BBDEFB"),
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 Children = {
                     new Label { Text = "Path", Margin = new Thickness(20, 15, 0, 5) },
