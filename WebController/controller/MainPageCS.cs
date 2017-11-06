@@ -37,16 +37,17 @@ namespace WebController
 			if (item != null) {
                 if (item.TargetType == typeof(AddPathCS)){
                     
-                }else if (item.TargetType == typeof(LoginPageCS))
+                }else if (item.TargetType == typeof(KeyPadCS))
                 {
 					var answer = await DisplayAlert("Logout", "Do you want to logout?", "Yes", "No");
 		            if(answer==true){
 		                App.IsUserLoggedIn = false;
-                        //Detail = new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
-                        Application.Current.MainPage = new NavigationPage(new LoginPageCS());
-    					masterPage.ListView.SelectedItem = null;
-    					IsPresented = false;
+                        Application.Current.MainPage = new NavigationPage(new KeyPadCS());
+    					
+
 					 }
+                    masterPage.ListView.SelectedItem = null;
+                    IsPresented = false;
 				}else{
 					if(item.TargetType == typeof(HomePageCS)){
                         HomePageCS.currentPath = item.PathEntity;
