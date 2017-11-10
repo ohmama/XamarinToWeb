@@ -88,7 +88,7 @@ namespace WebController
                     usernameEntry,
                     new Label { Text = "Password", Margin= new Thickness(20,5) },
                     passwordEntry,
-                    new Label { Text = "4 Digital Ping", Margin= new Thickness(20,5) },
+                    new Label { Text = "5 Digital Ping", Margin= new Thickness(20,5) },
                     pinEntry,
                     new Label { Text = "URL", Margin= new Thickness(20,5) },
                     urlEntry,
@@ -328,7 +328,7 @@ namespace WebController
         //    return true;
         //}
 
-        // control the pin as 4 digit
+        // control the pin as 5 digit
         void Pin_Control(object sender, TextChangedEventArgs e)
         {
             Entry thisBlock = ((Entry)sender);
@@ -345,9 +345,9 @@ namespace WebController
                 {
                     thisBlock.Text = e.OldTextValue;
                 }
-                else if (pinStr.Length > 4)
+                else if (pinStr.Length > 5)
                 {
-                    thisBlock.Text = pinStr.Remove(4);
+                    thisBlock.Text = pinStr.Remove(5);
                 }
             }
         }
